@@ -3,6 +3,11 @@ import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
+jest.mock('bcrypt', () => ({
+    hash: jest.fn(),
+    compare: jest.fn(),
+}));
+import * as bcrypt from 'bcrypt';
 
 describe('AuthService', () => {
     let service: AuthService;
@@ -34,24 +39,32 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if user is not found', async () => {
-        jest.spyOn(usersService, 'findOne').mockResolvedValue(null);
+        jest.spyOn(usersService, 'findOne').mockRejectedValue(
+            new UnauthorizedException('Invalid email or password'),
+        );
 
         await expect(
-            service.signIn('test@example.com', 'password'),
+            service.signIn({ email: 'test@example.com', pass: 'password' }),
         ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw UnauthorizedException if password is incorrect', async () => {
-        jest.spyOn(usersService, 'findOne').mockResolvedValue({
+        const user = {
             id: '1',
             email: 'test@example.com',
-            pass: 'wrongpassword',
+            pass: await bcrypt.hash('correct_password', 10),
             fullname: 'Test User',
             tasks: [],
-        });
+        };
+
+        jest.spyOn(usersService, 'findOne').mockResolvedValue(user);
+        (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
         await expect(
-            service.signIn('test@example.com', 'password'),
+            service.signIn({
+                email: 'test@example.com',
+                pass: 'wrong_password',
+            }),
         ).rejects.toThrow(UnauthorizedException);
     });
 
@@ -59,16 +72,20 @@ describe('AuthService', () => {
         const user = {
             id: '1',
             email: 'test@example.com',
-            pass: 'password',
+            pass: await bcrypt.hash('password', 10),
             fullname: 'Test User',
             tasks: [],
         };
         const token = 'mockToken';
 
         jest.spyOn(usersService, 'findOne').mockResolvedValue(user);
+        (bcrypt.compare as jest.Mock).mockResolvedValue(true);
         jest.spyOn(jwtService, 'signAsync').mockResolvedValue(token);
 
-        const result = await service.signIn('test@example.com', 'password');
+        const result = await service.signIn({
+            email: 'test@example.com',
+            pass: 'password',
+        });
 
         expect(result).toEqual({ access_token: token });
     });

@@ -1,4 +1,3 @@
-
 # 📝 **TODO LIST: El misterio de las tareas desprotegidas** 🔒
 
 Esta es una aplicación de TODO LIST en la que se gestionan tareas de usuarios. Sin embargo, hay algunos problemas y vulnerabilidades que necesitan ser corregidos para asegurar el funcionamiento correcto y la protección de los datos.
@@ -24,6 +23,7 @@ Tu misión consiste en completar los siguientes objetivos:
 6. **Auditoría general de seguridad**: Realiza una auditoría general del código y busca cualquier otro posible fallo de seguridad o funcional que debas corregir.
 
 > IMPORTANTE: No tomes estos objetivos como los únicos a cumplir. Todas las mejoras que puedas aportar para asegurar la seguridad y el correcto funcionamiento de la aplicación serán bienvenidas.
+
 ---
 
 ## 🚀 **Primeros pasos**
@@ -35,28 +35,32 @@ Sigue estos pasos para levantar el proyecto y trabajar en las correcciones neces
 
 2. **Clona el repositorio en tu máquina local**  
    Clona el repositorio forkeado:
-   ```bash
-   git clone https://github.com/tu-usuario/todo-list-bug.git
-   cd todo-list-bug
-   ```
+
+    ```bash
+    git clone https://github.com/tu-usuario/todo-list-bug.git
+    cd todo-list-bug
+    ```
 
 3. **Instala las dependencias**  
    Asegúrate de tener instaladas todas las dependencias necesarias ejecutando:
-   ```bash
-   yarn install
-   ```
+
+    ```bash
+    yarn install
+    ```
 
 4. **Inicializa la base de datos**
    Una vez que hayas instalado las dependencias ejecuta el comando para inicializar la base de datos:
-   ```bash
-   yarn migrations:run
-   ```
+
+    ```bash
+    yarn migrations:run
+    ```
 
 5. **Arranca el servidor**  
    Inicia el proyecto con:
-   ```bash
-   yarn start
-   ```
+
+    ```bash
+    yarn start
+    ```
 
 6. **Resuelve los bugs**  
    Identifica y resuelve los problemas mencionados en los objetivos y cualquier otro que encuentres.
